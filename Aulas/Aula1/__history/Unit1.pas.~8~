@@ -111,14 +111,8 @@ begin
   label9.Caption:= ('Triangulo X Área: ' + FormatFloat('0.00',xAreaX));
   label10.Caption:= ('Triangulo Y Área: ' + FormatFloat('0.00',xAreaY));
 
-
-    if (xAreaX > xAreaY) then
-      label11.Caption:= ('A área do triangulo X é maior')
-    else
-      label11.Caption:= ('A área do triangulo Y é maior');
   finally
-    FreeAndNil(xTrianguloX);
-    FreeAndNil(xtrianguloY);
+
   end;
 
 end;
