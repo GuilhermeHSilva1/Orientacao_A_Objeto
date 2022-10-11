@@ -43,17 +43,10 @@ var
 
 implementation
 
+uses
+  UTriangulo;
+
 {$R *.dfm}
-
-procedure TForm1.Button2Click(Sender: TObject);
-begin
- CalcularAreasOOP;
-end;
-
-procedure TForm1.CalcularAreasOOP;
-begin
-
-end;
 
 function TForm1.CalcularTriangulo1;
 var
@@ -91,12 +84,60 @@ begin
   Result:= xArea;
 end;
 
+procedure TForm1.CalcularAreasOOP;
+var
+  xTrianguloX: TTriangulo;
+  xTrianguloY: TTriangulo;
+
+  xAreaX: Double;
+  xAreaY: Double;
+begin
+  xTrianguloX := TTriangulo.Create;
+  xTrianguloY := TTriangulo.Create;
+
+  try
+    xTrianguloX.A := StrToFloatDef(Edit1.Text,0);
+    xTrianguloX.B := StrToFloatDef(Edit2.Text,0);
+    xTrianguloX.C := StrToFloatDef(Edit3.Text,0);
+
+    // xTrianguloX.D := 10; Não é possivel
+
+    xAreaX:= xTrianguloX.Area;
+
+    showMessage(xTrianguloX.D.ToString);
+
+    xTrianguloY.A := StrToFloatDef(Edit4.Text,0);
+    xTrianguloY.B := StrToFloatDef(Edit5.Text,0);
+    xTrianguloY.C := StrToFloatDef(Edit6.Text,0);
+
+    xAreaY:= xTrianguloY.Area;
+
+  label9.Caption:= ('Triangulo X Área: ' + FormatFloat('0.00',xAreaX));
+  label10.Caption:= ('Triangulo Y Área: ' + FormatFloat('0.00',xAreaY));
+
+
+    if (xAreaX > xAreaY) then
+      label11.Caption:= ('A área do triangulo X é maior')
+    else
+      label11.Caption:= ('A área do triangulo Y é maior');
+  finally
+    FreeAndNil(xTrianguloX);
+    FreeAndNil(xtrianguloY);
+  end;
+
+end;
+
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   if (CalcularTriangulo1 > CalcularTriangulo2) then
     label11.Caption:= ('A área do triangulo X é maior')
   else
     label11.Caption:= ('A área do triangulo Y é maior');
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+ CalcularAreasOOP;
 end;
 
 end.

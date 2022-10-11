@@ -1,0 +1,79 @@
+unit UContas;
+
+interface
+
+type
+    TContas = class
+      private
+        FNome: String;
+        FSaldo: Double;
+        FNumero: Integer;
+
+
+        procedure SetNome(const Value: String);
+        procedure SetSaldo(const Value: Double);
+        procedure SetNumero(const Value: Integer);
+
+        function GetNome: String;
+        function GetSaldo: Double;
+        function GetNumero: Integer;
+    public
+
+  function AlterarNome: String;
+  function Deposito: Double;
+  function Saque: Double;
+
+  property Nome: String read GetNome write SetNome;
+  property Saldo: Double read GetSaldo write SetSaldo;
+  property Numero: Integer read GetNumero write SetNumero;
+
+end;
+
+implementation
+
+function TContas.AlterarNome: String;
+begin
+
+end;
+
+function TContas.Deposito: Double;
+begin
+
+end;
+
+function TContas.Saque: Double;
+begin
+
+end;
+
+function TContas.GetNome: String;
+begin
+
+end;
+
+function TContas.GetNumero: Integer;
+begin
+
+end;
+
+function TContas.Getsaldo: Double;
+begin
+
+end;
+
+procedure TContas.SetNome(const Value: String);
+begin
+
+end;
+
+procedure TContas.SetNumero(const Value: Integer);
+begin
+
+end;
+
+procedure TContas.SetSaldo(const Value: Double);
+begin
+
+end;
+
+end.
