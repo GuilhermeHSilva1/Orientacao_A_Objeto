@@ -4,10 +4,12 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, UBomba;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, UBomba,
+  Vcl.ComCtrls, Vcl.Imaging.pngimage, CommCtrl;
 
 type
   TTipoCombustivel = (Gasolina, Alcool, Diesel);
+  TAbastecer = (Litro, Valor);
   TForm1 = class(TForm)
     Preco: TEdit;
     Quantidade: TEdit;
@@ -29,11 +31,16 @@ type
     Shape3: TShape;
     Label3: TLabel;
     Modificar: TButton;
+    Tanque: TProgressBar;
+    Label4: TLabel;
+    Image1: TImage;
     procedure CadastrarClick(Sender: TObject);
     procedure AltCombustivelClick(Sender: TObject);
     procedure ModificarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure AltPrecoClick(Sender: TObject);
+    procedure AltQuantidadeClick(Sender: TObject);
+    procedure AbastecerClick(Sender: TObject);
   private
     { Private declarations }
     procedure AtualizarForm;
@@ -69,14 +76,17 @@ begin
   Memo1.Lines.Clear; Memo2.Lines.Clear; Memo3.Lines.Clear;
 
   Memo1.Lines.Add(xBomba.TipoCombustivel);
-  Memo2.Lines.Add('R$:' + xBomba.ValorLitro.ToString);
-  Memo3.Lines.Add(xBomba.Quantidade.ToString + ' Litros');
+  Memo2.Lines.Add('R$:' + FormatFloat('0.000',xBomba.ValorLitro));
+  Memo3.Lines.Add(FormatFloat('0.000',xBomba.Quantidade) + ' Litros');
+  Tanque.Position:= Trunc(xBomba.Quantidade);
 end;
 
 procedure TForm1.CadastrarClick(Sender: TObject);
 begin
   if (Preco.Text = '') or (Quantidade.Text = '') or (RadioGroup1.ItemIndex = -1)then
     showMessage('Por favor preencha todos os valores')
+  else if (StrToFloatDef(Quantidade.text, 1001) > 1000) then
+    showMessage('Capacidade maxima do tanque é de 1000 Litros')
   else
   begin
     xBomba:= TBomba.Create;
@@ -90,14 +100,36 @@ begin
         Diesel:
           xBomba.TipoCombustivel:= 'Diesel';
       end;
+      Tanque.Position:= Trunc(xBomba.Quantidade);
       AtualizarForm;
       AtualizarMemos;
   end;
 end;
 
 procedure TForm1.AltPrecoClick(Sender: TObject);
+var
+  xNovoPreco: Double;
 begin
-  xBomba.AlterarValor(StrToFloat(InputBox('Informar','Digite o novo preço','')));
+  if not TryStrToFloat(InputBox('Informar','Informe o novo preço',''), xNovoPreco) then
+    raise Exception.Create('Valor Invalido')
+  else
+  begin
+    xBomba.AlterarValor(xNovoPreco);
+    AtualizarMemos;
+  end;
+end;
+
+procedure TForm1.AltQuantidadeClick(Sender: TObject);
+var
+  xNovoPreco : Double;
+begin
+  if not TryStrToFloat(InputBox('Informar','Informe quantos litros tem',''), xNovoPreco) then
+    raise Exception.Create('Valor Invalido')
+  else
+    begin
+      xBomba.AlterarQuantidade(xNovoPreco);
+      AtualizarMemos;
+    end;
 end;
 
 procedure TForm1.AltCombustivelClick(Sender: TObject);
@@ -118,9 +150,35 @@ begin
   AtualizarMemos;
 end;
 
+procedure TForm1.AbastecerClick(Sender: TObject);
+var
+  xValor: Double;
+begin
+  if ValorAbastecer.Text = '' then
+    showMessage('Informe um valor')
+  else
+    begin
+      xValor:= StrToFloatDef(ValorAbastecer.Text,0);
+      case TAbastecer(RadioGroup2.ItemIndex) of
+        Litro:
+          begin
+            label3.Caption:= ('Total a pagar R$:' + FormatFloat('0.00',(xBomba.AbastecerPorLitro(xValor))));
+            AtualizarMemos;
+          end;
+        Valor:
+          begin
+            label3.Caption:= ('Quantidade de Litros: ' + FormatFloat('0.000',(xBomba.AbastecerPorValor(xValor))));
+            AtualizarMemos;
+          end
+        else
+          showMessage('Selecione como deseja abastecer');
+      end;
+    end;
+end;
+
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  xBomba.Free;
+  FreeAndNil(xBomba);
 end;
 
 end.

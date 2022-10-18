@@ -2,6 +2,9 @@ unit UBomba;
 
 interface
 
+uses
+  Vcl.Dialogs;
+
 type
   TBomba = class
 
@@ -24,11 +27,11 @@ type
       property ValorLitro: Double read GetValorLitro write SetValorLitro;
       property Quantidade: Double read GetQuantidade write SetQuantidade;
 
-      function AbastecerPorValor: Double;
-      function AbastecerPorLitro: Double;
-      function AlterarValor: Double;
+      function AbastecerPorValor(const pValor: Double): Double;
+      function AbastecerPorLitro(const pValor: Double): Double;
+      procedure AlterarValor(const pValor : Double);
       procedure AlterarCombustivel(const pValor: Integer);
-      function AlterarQuantidade: Double;
+      procedure AlterarQuantidade(const pValor:Double);
 
 
   end;
@@ -37,29 +40,49 @@ implementation
 
 { TBomba }
 
-function TBomba.AbastecerPorLitro: Double;
+function TBomba.AbastecerPorLitro(const pValor: double): Double;
 begin
-
+  if (pValor > FQuantidade)then
+    Result:= 0
+  else
+    begin
+      FQuantidade:= FQuantidade - pValor;
+      Result:= pValor * FValorLitro;
+    end;
 end;
 
-function TBomba.AbastecerPorValor: Double;
+function TBomba.AbastecerPorValor(const pValor: Double): Double;
 begin
-
+  if((pValor / FValorLitro) > FQuantidade) then
+    Result:= 0
+  else
+    begin
+      FQuantidade:= FQuantidade - (pValor / FValorLitro);
+      Result:= pValor / FValorLitro;
+    end;
 end;
 
 procedure TBomba.AlterarCombustivel(const pValor: Integer);
 begin
-  FTipoCombustivel := pValor;
+  if pValor = 0 then
+    FTipoCombustivel:= 'Gasolina'
+  else if pValor = 1 then
+    FTipoCombustivel:= 'Alcool'
+  else
+    FTipoCombustivel:= 'Diesel';
 end;
 
-function TBomba.AlterarQuantidade: Double;
+procedure TBomba.AlterarQuantidade(const pValor:Double);
 begin
-
+  if ((pValor + FQuantidade) > 1000 )then
+    showMessage('Ultrapassou o limite do tanque')
+  else
+    FQuantidade:= pValor;
 end;
 
-function TBomba.AlterarValor: Double;
+procedure TBomba.AlterarValor(const pValor:Double);
 begin
-
+  FValorLitro:= pValor;
 end;
 
 function TBomba.GetQuantidade: Double;

@@ -24,11 +24,11 @@ type
       property ValorLitro: Double read GetValorLitro write SetValorLitro;
       property Quantidade: Double read GetQuantidade write SetQuantidade;
 
-      function AbastecerPorValor: Double;
-      function AbastecerPorLitro: Double;
+      function AbastecerPorValor(const pValor: Double): Double;
+      function AbastecerPorLitro(const pValor: Double): Double;
       procedure AlterarValor(const pValor : Double);
       procedure AlterarCombustivel(const pValor: Integer);
-      function AlterarQuantidade: Double;
+      procedure AlterarQuantidade(const pValor:Double);
 
 
   end;
@@ -37,14 +37,20 @@ implementation
 
 { TBomba }
 
-function TBomba.AbastecerPorLitro: Double;
+function TBomba.AbastecerPorLitro(const pValor: double): Double;
 begin
-
+  if (pValor > FQuantidade)then
+    Result:= 0
+  else
+    Result:= pValor * FValorLitro;
 end;
 
-function TBomba.AbastecerPorValor: Double;
+function TBomba.AbastecerPorValor(const pValor: Double): Double;
 begin
-
+  if((pValor / FValorLitro) > FQuantidade) then
+    Result:= 0
+  else
+    Result:= pValor / FValorLitro;
 end;
 
 procedure TBomba.AlterarCombustivel(const pValor: Integer);
@@ -57,14 +63,14 @@ begin
     FTipoCombustivel:= 'Diesel';
 end;
 
-function TBomba.AlterarQuantidade: Double;
+procedure TBomba.AlterarQuantidade(const pValor:Double);
 begin
-
+  FQuantidade:= pValor;
 end;
 
 procedure TBomba.AlterarValor(const pValor:Double);
 begin
-
+  FValorLitro:= pValor;
 end;
 
 function TBomba.GetQuantidade: Double;
