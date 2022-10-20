@@ -1,0 +1,76 @@
+unit Principal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, UElevador;
+
+type
+  TForm2 = class(TForm)
+    Inicializar: TButton;
+    Adicionar: TButton;
+    Remover: TButton;
+    Subir: TButton;
+    Descer: TButton;
+    AndarAgora: TLabel;
+    AndarMax: TLabel;
+    PessoasAgora: TLabel;
+    PessoasMax: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure InicializarClick(Sender: TObject);
+  private
+    { Private declarations }
+    xElevador: TElevador;
+    procedure AtualizarForm;
+    procedure AtualizarLabels;
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm2.AtualizarForm;
+begin
+  Inicializar.Visible:=  False;
+  PessoasMax.Visible:=   True;
+  PessoasAgora.Visible:= True;
+  AndarMax.Visible:=     True;
+  AndarAgora.Visible:=   True;
+  Subir.Visible:=        True;
+  Descer.Visible:=       True;
+  Adicionar.Visible:=    True;
+  Remover.Visible:=      True;
+end;
+
+procedure TForm2.AtualizarLabels;
+begin
+  PessoasMax.Caption:= '';
+  PessoasAgora.Caption:= '';
+  AndarMax.Caption:= '';
+  AndarAgora.Caption:= '';
+end;
+
+procedure TForm2.InicializarClick(Sender: TObject);
+var
+  xAndarMax, xPessoasMax: Integer;
+begin
+  xAndarMax:= StrToIntDef(Edit1.Text,0);
+  xPessoasMax:= StrToIntDef(Edit2.Text,0);
+  if (xAndarMax = 0) or (xPessoasMax = 0 ) then
+    showMessage('Digite Valores Validos')
+  else
+    begin
+      xElevador:= xElevador.Create(xAndarMax, xPessoasMax);
+      AtualizarForm;
+      AtualizarLabels;
+    end;
+end;
+
+end.

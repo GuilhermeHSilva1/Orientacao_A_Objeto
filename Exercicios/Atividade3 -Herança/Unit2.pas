@@ -52,10 +52,7 @@ begin
       begin
 
         Memo1.Lines.clear;
-        Memo1.Lines.Add('Nome: ' + nome.Text);
-        Memo1.Lines.Add('Endereço: ' + Endereco.Text);
-        Memo1.Lines.Add('CPF: ' + xCPF);
-        Memo1.Lines.Add('Idade: ' + Idade.Text);
+        Memo1.Lines.Add(TPessoaFisica(xPessoa).GravarPessoa);
       end
       else
         showMessage('CPF Invalido');

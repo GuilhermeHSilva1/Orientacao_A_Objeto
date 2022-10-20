@@ -43,9 +43,9 @@ type
     procedure AbastecerClick(Sender: TObject);
   private
     { Private declarations }
+    xBomba: TBomba;
     procedure AtualizarForm;
     procedure AtualizarMemos;
-    var xBomba: TBomba;
   public
     { Public declarations }
   end;
@@ -85,8 +85,10 @@ procedure TForm1.CadastrarClick(Sender: TObject);
 begin
   if (Preco.Text = '') or (Quantidade.Text = '') or (RadioGroup1.ItemIndex = -1)then
     showMessage('Por favor preencha todos os valores')
-  else if (StrToFloatDef(Quantidade.text, 1001) > 1000) then
-    showMessage('Capacidade maxima do tanque é de 1000 Litros')
+  else if (StrToFloatDef(Quantidade.text, 1001) > 1000) or (StrToFloatDef(Quantidade.text, -1) < 0) then
+    showMessage('Quantidade Invalida')
+  else if (StrToFloatDef(Preco.Text,-1) < 0) then
+    showMessage('Preço invalido')
   else
   begin
     xBomba:= TBomba.Create;

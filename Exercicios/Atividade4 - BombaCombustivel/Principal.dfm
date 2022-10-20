@@ -699,6 +699,8 @@ object Form1: TForm1
     Height = 44
     Max = 1000
     Orientation = pbVertical
+    Smooth = True
+    SmoothReverse = True
     TabOrder = 14
   end
   object Preco: TEdit
