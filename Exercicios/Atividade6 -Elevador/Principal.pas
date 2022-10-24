@@ -4,30 +4,28 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, UElevador;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, UElevador, Vcl.ExtCtrls;
 
 type
   TForm2 = class(TForm)
     Inicializar: TButton;
     Adicionar: TButton;
-    Remover: TButton;
-    Subir: TButton;
-    Descer: TButton;
     AndarAgora: TLabel;
     AndarMax: TLabel;
     PessoasAgora: TLabel;
     PessoasMax: TLabel;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
+    RadioGroup1: TRadioGroup;
+    Mover: TButton;
     procedure InicializarClick(Sender: TObject);
-    procedure SubirClick(Sender: TObject);
+    procedure AdicionarClick(Sender: TObject);
+    procedure MoverClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     FElevador: TElevador;
     procedure AtualizarForm;
     procedure AtualizarLabels;
+    procedure Criar;
   public
     { Public declarations }
   end;
@@ -42,18 +40,13 @@ implementation
 procedure TForm2.AtualizarForm;
 begin
   Inicializar.Visible:=  False;
-  Edit1.Visible:=        False;
-  Edit2.Visible:=        False;
-  Label1.Visible:=       False;
-  Label2.Visible:=       False;
+  RadioGroup1.Visible:=  True;
+  Mover.Visible:=        True;
   PessoasMax.Visible:=   True;
   PessoasAgora.Visible:= True;
   AndarMax.Visible:=     True;
   AndarAgora.Visible:=   True;
-  Subir.Visible:=        True;
-  Descer.Visible:=       True;
   Adicionar.Visible:=    True;
-  Remover.Visible:=      True;
 end;
 
 procedure TForm2.AtualizarLabels;
@@ -64,25 +57,64 @@ begin
   AndarAgora.Caption:= 'Andar atual: ' + FElevador.AndarAgora.ToString;
 end;
 
-procedure TForm2.InicializarClick(Sender: TObject);
+procedure TForm2.Criar;
 var
-  xAndarMax, xPessoasMax: Integer;
+  xAndarMax, xPessoasMax, I: Integer;
 begin
-  xAndarMax:= StrToInt(Edit1.Text);
-  xPessoasMax:= StrToInt(Edit2.Text);
-  if (xAndarMax = 0) or (xPessoasMax = 0) then
-  showMessage('Digite Valores acima de 0')
-  else
-  begin
-    FElevador:= TElevador.Create(xAndarMax, xPessoasMax);
-    AtualizarForm;
-    AtualizarLabels;
-  end;
+    try
+      xAndarMax:= StrToIntDef(InputBox('Informar','Informe quantos Andares existe no predio',''),0);
+      xPessoasMax:= StrToIntDef(InputBox('Informar','Informe quantas pessoas cabem no elevador',''),0);
+      if (xAndarMax <= 0) or (xPessoasMax <= 0) or (xAndarMax > 163)then
+        raise Exception.Create('Digite Valores vaildos, e que seja acima de 0 e abaixo de 164')
+      else
+      begin
+        for I := 0 to xAndarMax do
+          begin
+            RadioGroup1.Items.Add(I.ToString);
+          end;
+        if xAndarMax >= 75 then
+          RadioGroup1.Columns:= 8;
+          FElevador:= TElevador.Create(xAndarMax, xPessoasMax);
+          AtualizarForm;
+          AtualizarLabels;
+      end;
+    except
+      on E: Exception do
+        raise Exception.Create('Erro ao criar: ' + E.Message);
+    end;
 end;
 
-procedure TForm2.SubirClick(Sender: TObject);
+procedure TForm2.InicializarClick(Sender: TObject);
 begin
-  FElevador.Subir;
+  Criar;
+end;
+
+procedure TForm2.MoverClick(Sender: TObject);
+begin
+  try
+    FElevador.MoverElevador(RadioGroup1.ItemIndex);
+  except
+    On E: Exception do
+      raise Exception.Create('Erro ao usar elevador: ' + E.Message);
+  end;
+    AtualizarLabels;
+end;
+
+procedure TForm2.AdicionarClick(Sender: TObject);
+begin
+    try
+      FElevador.Adicionar(StrToIntDef(InputBox('Informar','Digite qual andar deseja Sair:',''),-1));
+    except
+      on E: Exception do
+        raise Exception.Create('Erro ao adicionar: ' + E.Message);
+    end;
+
+  AtualizarLabels;
+end;
+
+procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FreeAndNil(FElevador);
 end;
 
 end.

@@ -2,8 +2,8 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = 'Form2'
-  ClientHeight = 281
-  ClientWidth = 434
+  ClientHeight = 536
+  ClientWidth = 447
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,6 +11,7 @@ object Form2: TForm2
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   object AndarAgora: TLabel
@@ -69,82 +70,43 @@ object Form2: TForm2
     ParentFont = False
     Visible = False
   end
-  object Label1: TLabel
-    Left = 89
-    Top = 106
-    Width = 56
-    Height = 13
-    Caption = 'Andar Max;'
-  end
-  object Label2: TLabel
-    Left = 79
-    Top = 133
-    Width = 66
-    Height = 13
-    Caption = 'Pessoas Max;'
-  end
   object Inicializar: TButton
-    Left = 151
-    Top = 157
-    Width = 132
+    Left = 141
+    Top = 117
+    Width = 172
     Height = 25
     Caption = 'Inicializar'
     TabOrder = 0
     OnClick = InicializarClick
   end
   object Adicionar: TButton
-    Left = 31
+    Left = 70
     Top = 210
-    Width = 75
+    Width = 154
     Height = 25
-    Caption = 'Adicionar'
+    Caption = 'Adicionar Pessoas'
     TabOrder = 1
     Visible = False
+    OnClick = AdicionarClick
   end
-  object Remover: TButton
-    Left = 122
-    Top = 210
-    Width = 75
-    Height = 25
-    Caption = 'Remover'
+  object RadioGroup1: TRadioGroup
+    Left = 70
+    Top = 241
+    Width = 314
+    Height = 250
+    Caption = 'Andares'
+    Columns = 4
     TabOrder = 2
     Visible = False
   end
-  object Subir: TButton
-    Left = 219
+  object Mover: TButton
+    Left = 230
     Top = 210
-    Width = 75
+    Width = 154
     Height = 25
-    Caption = 'Subir'
+    Caption = 'Usar Elevador'
     TabOrder = 3
     Visible = False
-    OnClick = SubirClick
-  end
-  object Descer: TButton
-    Left = 309
-    Top = 210
-    Width = 75
-    Height = 25
-    Caption = 'Descer'
-    TabOrder = 4
-    Visible = False
-  end
-  object Edit1: TEdit
-    Left = 151
-    Top = 103
-    Width = 132
-    Height = 21
-    NumbersOnly = True
-    TabOrder = 5
-    TextHint = 'Total Andares'
-  end
-  object Edit2: TEdit
-    Left = 151
-    Top = 130
-    Width = 132
-    Height = 21
-    NumbersOnly = True
-    TabOrder = 6
-    TextHint = 'Max Pessoas no Elevador'
+    OnClick = MoverClick
   end
 end
